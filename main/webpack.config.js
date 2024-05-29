@@ -6,7 +6,10 @@ const copyPlugin = require("copy-webpack-plugin");
 module.exports = {
     mode: 'development',
     entry: {
-      weather: './src/js/weather.js',
+      general: './src/js/general.js',
+      index: './src/js/index.js',
+      search: './src/js/search.js',
+      lists: './src/js/lists.js',
     },
     output: {
       path: path.resolve(__dirname, "dist"),
@@ -51,9 +54,21 @@ module.exports = {
     plugins: [
       new htmlWebpackPlugin({
         template: path.resolve(__dirname, "./src/index.html"),
-        chunks: ["weather"],
+        chunks: ["search"],
         inject: "body",
         filename: "index.html",
+      }),
+      new htmlWebpackPlugin({
+        template: path.resolve(__dirname, "./src/search.html"),
+        chunks: ["search"],
+        inject: "body",
+        filename: "search.html",
+      }),
+      new htmlWebpackPlugin({
+        template: path.resolve(__dirname, "./src/lists.html"),
+        chunks: ["search"],
+        inject: "body",
+        filename: "lists.html",
       }),
       /* new copyPlugin({
         patterns: [

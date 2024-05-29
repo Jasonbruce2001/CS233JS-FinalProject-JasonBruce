@@ -1,3 +1,6 @@
+import './general';
+const regeneratorRuntime = require("regenerator-runtime");
+
 const API_KEY = "?api_key=30a72465b4ea70bc5e40084e8fa0656d";
 const options = {
     method: 'GET',
