@@ -1,0 +1,30 @@
+.taskbar{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    float: left;
+    background-color: cornflowerblue;
+    font-size: larger;
+    color: white;
+}
+
+.searchBox{
+    margin-top: 10px;
+    border: 2px solid;
+    width: 70%;
+    height: 650px;
+    overflow-y: auto;
+}
+
+.resultItem{
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border: 2px solid;
+    width: 95%;
+}
+
+.pageNum{
+    margin-top: 4px;
+    margin-left: 4px;
+    margin-right: 4px;
+}
