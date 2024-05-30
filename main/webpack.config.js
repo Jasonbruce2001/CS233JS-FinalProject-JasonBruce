@@ -54,7 +54,7 @@ module.exports = {
     plugins: [
       new htmlWebpackPlugin({
         template: path.resolve(__dirname, "./src/index.html"),
-        chunks: ["search"],
+        chunks: ["index"],
         inject: "body",
         filename: "index.html",
       }),
@@ -66,7 +66,7 @@ module.exports = {
       }),
       new htmlWebpackPlugin({
         template: path.resolve(__dirname, "./src/lists.html"),
-        chunks: ["search"],
+        chunks: ["lists"],
         inject: "body",
         filename: "lists.html",
       }),
@@ -80,5 +80,10 @@ module.exports = {
       }),
       */
     ],
+    optimization: {
+      splitChunks: {
+        chunks: "all",
+      },
+    },
 }
   

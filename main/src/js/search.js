@@ -35,6 +35,7 @@ class Search{
         this.submitMovieSearch = this.submitMovieSearch.bind(this);
         this.prevPage = this.prevPage.bind(this);
         this.nextPage = this.nextPage.bind(this);
+        
         this.addEventListeners();
     }
 
