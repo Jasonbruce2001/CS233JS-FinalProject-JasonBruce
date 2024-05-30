@@ -77,7 +77,7 @@ class Search{
     renderSearchItem(index){
         //build html
         return `<div class="row resultItem" id="sr${index}">
-                    <div class="col-2"><img src="${IMAGE_URL}${this.searchResults[index].poster_path}" alt="Movie Poster" style="width: 90%; height: 90%;"></div> 
+                    <div class="col-2"><img src="${IMAGE_URL}${this.searchResults[index].poster_path}" alt="Movie Poster" style="width: 90%; height: 90%; margin-top: 7%;"></div> 
                     <div class="col-8"><p><b>Title:</b> ${this.searchResults[index].title} (${this.searchResults[index].release_date.substring(0,4)})
                     <br><b>Online Rating:</b> ${this.searchResults[index].vote_average} (${this.searchResults[index].vote_count} 
                     votes)<br><b>Language:</b> ${this.searchResults[index].original_language}</p></div>
@@ -158,4 +158,6 @@ class Search{
     }
 };
 
-window.onload = () => { new Search }
+if (window.location.href.match('search.html') != null) {
+    window.onload = () => { new Search }
+}

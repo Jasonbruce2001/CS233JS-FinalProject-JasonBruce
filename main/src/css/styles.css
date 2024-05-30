@@ -28,3 +28,38 @@
     margin-left: 4px;
     margin-right: 4px;
 }
+
+.newReleases{
+    margin-top: 10px;
+    border: 2px solid;
+    height: 650px;
+    overflow-y: auto;
+}
+
+.filters{
+    margin-top: 10px;
+    border: 2px solid;
+    height: 650px;
+}
+
+.currentList{
+    margin-top: 10px;
+    border: 2px solid;
+    height: 650px;
+    overflow-y: auto;
+}
+
+.lists{
+    margin-top: 10px;
+    border: 2px solid;
+    height: 650px;
+    overflow-y: auto;
+}
+
+.labels{
+    margin-top: 10px;
+}
+
+.listItem{
+    margin-top: 3px;
+}
