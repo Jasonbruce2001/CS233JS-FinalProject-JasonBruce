@@ -38,7 +38,6 @@
 
 .filters{
     margin-top: 10px;
-    border: 2px solid;
     height: 650px;
 }
 
@@ -62,4 +61,19 @@
 
 .listItem{
     margin-top: 3px;
+}
+
+.listDropDown{
+    width: 300px;
+}
+
+.rename{
+    margin-left: 1%;
+    margin-top: 1%;
+    width: 7%;
+    height: 80%;
+}
+
+.renameInput{
+    margin-top:1%
 }

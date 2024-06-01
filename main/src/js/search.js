@@ -21,6 +21,7 @@ class Search{
         this.curPage = 1;
         this.totalPages = 1;
         this.selectedIndex = 0;
+        this.formHidden = true;
 
         //ui elements
         this.searchInput = document.getElementById('search');
@@ -29,6 +30,8 @@ class Search{
         this.pageOut = document.getElementById("pageNumOut");
         this.$prevPage = document.getElementById("prevPage");
         this.$nextPage = document.getElementById("nextPage");
+        this.movieForm = document.getElementById("addMovieForm");
+        this.selectedInfo = document.getElementById("selectedMovieInfo");
         
         //bind necessary functions
         this.addEventListeners = this.addEventListeners.bind(this);
@@ -109,9 +112,12 @@ class Search{
 
     selectResult(index){
         this.deselectResults();
+        this.showForm();
+        this.renderSelectedInfo(index);
 
         this.selectedIndex = index;
         document.getElementById(`sr${index}`).style.backgroundColor = "yellow";
+
     }
 
     nextPage(){
@@ -156,6 +162,25 @@ class Search{
         for(let i = 0; i < this.searchResults.length; i++){
             document.getElementById(`sr${i}`).style.backgroundColor = 'white';
         }
+    }
+
+    renderSelectedInfo(index){
+        let movie = this.searchResults[index];
+        const html = `<div class="row">
+                        <div class="col-5"><img src="${IMAGE_URL}${movie.poster_path}" alt="Movie Poster" style="width: 80%; height: 80%; margin-top: 7%;"></div> 
+                        <div class="col-7" style="margin-top: 7%;"><p><b>Title:</b> ${movie.title} (${movie.release_date.substring(0,4)})
+                        <br><b>Online Rating:</b> ${movie.vote_average} (${movie.vote_count}) 
+                        votes)<br><b>Language:</b> ${movie.original_language}</p><br /><b>Description:</b> ${movie.overview}</div>
+                      </div>`;
+        this.selectedInfo.innerHTML = html;
+    }
+
+    showForm(){
+        this.movieForm.hidden = false;
+    }
+
+    hideform(){
+        this.movieForm.hidden = true;
     }
 };
 
