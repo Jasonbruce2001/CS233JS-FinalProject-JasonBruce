@@ -1,6 +1,6 @@
 import './general';
 const regeneratorRuntime = require("regenerator-runtime");
-const EMPTY_MOVIE = {title: '', rating: '', comments: ''};
+let EMPTY_MOVIE = {title: '', rating: '', comments: ''};
 
 class List{
   
@@ -17,20 +17,23 @@ class List{
             console.log("Could not load from local storage");
         }
         //public class fields
-        this.numLists = this.lists.length;
         this.selectedList = 0;
 
         //ui elements
         this.storedLists = document.getElementById("lists");
         this.addListIcon = document.getElementById("addListIcon");
         this.curList = document.getElementById("currentList");
+        this.renameInput;
 
         //bind necessary functions
         this.addEventListeners = this.addEventListeners.bind(this);
         this.addList = this.addList.bind(this);
         this.removeStoredList = this.removeStoredList.bind(this);
+        this.selectList  =  this.selectList.bind(this);
+        this.deselectLists = this.deselectLists.bind(this);
      
         this.addEventListeners();
+        this.renderStoredLists();
     }
 
     addEventListeners(){
@@ -52,7 +55,12 @@ class List{
         //add new list
         this.lists.push(newList);
 
+        //set lists to local storage
+        localStorage["lists"]  = JSON.stringify(this.lists);
+        console.log(JSON.parse(localStorage["lists"]));
+
         //re-render lists
+        this.deselectLists();
         this.renderStoredLists();
         this.addEventListeners();
     }
@@ -61,18 +69,42 @@ class List{
         event.preventDefault();
 
         this.deselectLists();
-        document.getElementById(`list${index}`).style.backgroundColor = "LightGray";
-       
-        let list = this.lists[index];
+        this.renameInput = document.getElementById("renameInput");
 
+        try{
+        document.getElementById(`list${index}`).style.backgroundColor = "LightGray";
+
+        let list = this.lists[index];
+        
         this.curList.innerHTML = `<div class="d-flex">
-                                    <input type="text" placeholder="${list[0].listName}" class="renameInput"> <button type="button" id="rename" class="rename">Rename</button>
-                                </div>`;
+                                    <input type="text" placeholder="${list[0].listName}" class="renameInput" id="renameInput"> <button type="button" id="rename" class="rename">Rename</button>
+                                  </div>`;
+
+        let rename = document.getElementById("rename");
+        this.renameInput = document.getElementById("renameInput");
+
+        rename.addEventListener('click', () => {this.renameList(list)});
+
+        } catch {
+            console.log("error");
+        }
+    }
+
+    renameList(list){
+        list[0].listName = this.renameInput.value;
+        this.renameInput.value = "";
+
+        this.renderStoredLists();
     }
 
     deselectLists(){
-        for(let i = 0; i < this.lists.length; i++){
-            document.getElementById(`list${i}`).style.backgroundColor = "white";
+        try {
+            for(let i = 0; i < this.lists.length; i++){
+                document.getElementById(`list${i}`).style.backgroundColor = "white";
+            }
+            this.selectedList = -1;
+        } catch {
+            console.log("Cant deselect");
         }
     }
 
@@ -102,6 +134,7 @@ class List{
     }
 
     removeStoredList(index, event){
+        this.deselectLists();
         event.preventDefault();
         this.visualMinusPress(index);
 
@@ -109,7 +142,9 @@ class List{
             this.lists.splice(index, 1);
         }
 
+        localStorage["lists"] = JSON.stringify(this.lists);
         this.renderStoredLists();
+        this.deselectLists();
     }
 
     //helper functions

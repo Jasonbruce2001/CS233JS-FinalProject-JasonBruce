@@ -17,6 +17,7 @@ class Search{
     constructor(){
         //instance variables
         this.searchResults = [];
+        this.listNames = [];
         this.search = '';
         this.curPage = 1;
         this.totalPages = 1;
@@ -32,6 +33,7 @@ class Search{
         this.$nextPage = document.getElementById("nextPage");
         this.movieForm = document.getElementById("addMovieForm");
         this.selectedInfo = document.getElementById("selectedMovieInfo");
+        this.selectList = document.getElementById("selectList");
         
         //bind necessary functions
         this.addEventListeners = this.addEventListeners.bind(this);
@@ -40,6 +42,7 @@ class Search{
         this.nextPage = this.nextPage.bind(this);
         
         this.addEventListeners();
+        this.getListsFromStorage();
     }
 
     //class methods
@@ -173,6 +176,31 @@ class Search{
                         votes)<br><b>Language:</b> ${movie.original_language}</p><br /><b>Description:</b> ${movie.overview}</div>
                       </div>`;
         this.selectedInfo.innerHTML = html;
+
+        for(let i = 0; i < this.listNames.length;  i++){
+            //create option element for  each lits
+            let opt = document.createElement('option');
+            opt.value = this.listNames[i];
+            opt.innerHTML = this.listNames[i];
+
+            //append element to dropdown
+            this.selectList.appendChild(opt);
+        }
+    }
+
+    getListsFromStorage(){
+        try{
+            let lists = JSON.parse(localStorage["lists"]);
+                
+            for(let i = 0; i < lists.length; i++){
+                let list  = lists[i];
+                this.listNames.push(list[0].listName);
+            }
+
+            console.log(this.listNames);
+        } catch {
+            console.log("lists not found");
+        }
     }
 
     showForm(){
