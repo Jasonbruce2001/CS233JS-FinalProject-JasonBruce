@@ -34,12 +34,16 @@ class Search{
         this.movieForm = document.getElementById("addMovieForm");
         this.selectedInfo = document.getElementById("selectedMovieInfo");
         this.selectList = document.getElementById("selectList");
+        this.saveButton = document.getElementById("save");
+        this.formRating = document.getElementById("rating");
+        this.formComments = document.getElementById("comments");
         
         //bind necessary functions
         this.addEventListeners = this.addEventListeners.bind(this);
         this.submitMovieSearch = this.submitMovieSearch.bind(this);
         this.prevPage = this.prevPage.bind(this);
         this.nextPage = this.nextPage.bind(this);
+        this.saveMovie = this.addMovie.bind(this);
         
         this.addEventListeners();
         this.getListsFromStorage();
@@ -53,6 +57,8 @@ class Search{
         this.$prevPage.style.cursor = "pointer";
         this.$nextPage.onclick = this.nextPage;
         this.$nextPage.style.cursor = "pointer";
+        this.saveButton.style.cursor = "pointer";
+        this.saveButton.onclick = this.saveMovie;
     }
 
     //method is called when search button is pressed, takes user input on page
@@ -119,6 +125,7 @@ class Search{
         this.renderSelectedInfo(index);
 
         this.selectedIndex = index;
+        console.log(this.selectedIndex);
         document.getElementById(`sr${index}`).style.backgroundColor = "yellow";
 
     }
@@ -209,6 +216,20 @@ class Search{
 
     hideform(){
         this.movieForm.hidden = true;
+    }
+
+    addMovie(){
+        //retrieve lists from localStorage
+        let lists =  JSON.parse(localStorage["lists"]);
+        
+        let movie = this.searchResults[this.selectedIndex];
+        let list = lists[this.selectList.selectedIndex];
+
+        console.log(movie);
+        console.log(list);
+        
+        //save lists to localStorage
+        //localStorage["lists"] = JSON.stringify(lists);
     }
 };
 

@@ -1,9 +1,8 @@
 import './general';
 const regeneratorRuntime = require("regenerator-runtime");
-let EMPTY_MOVIE = {title: '', rating: '', comments: ''};
+let EMPTY_MOVIE = {title: '', rating: '', comments: '', link: ''};
 
 class List{
-  
     constructor(){
         //try accessing lists from local storage
         try {
@@ -16,8 +15,8 @@ class List{
             
             console.log("Could not load from local storage");
         }
-        //public class fields
-        this.selectedList = 0;
+
+        this.selectedIndex = -1; //negative 1 when nothing selected
 
         //ui elements
         this.storedLists = document.getElementById("lists");
@@ -31,7 +30,9 @@ class List{
         this.removeStoredList = this.removeStoredList.bind(this);
         this.selectList  =  this.selectList.bind(this);
         this.deselectLists = this.deselectLists.bind(this);
+        this.renameList = this.renameList.bind(this);
      
+        //call functions to start program
         this.addEventListeners();
         this.renderStoredLists();
     }
@@ -50,7 +51,7 @@ class List{
         this.visualAddPress();
         
         const NEW_LIST = {listName: `List ${this.lists.length + 1}`, numMovie: 0};
-        const newList = [NEW_LIST, EMPTY_MOVIE];
+        const newList = [NEW_LIST];
             
         //add new list
         this.lists.push(newList);
@@ -65,8 +66,8 @@ class List{
         this.addEventListeners();
     }
 
-    selectList(index, event){
-        event.preventDefault();
+    selectList(index){
+        //event.preventDefault();
 
         this.deselectLists();
         this.renameInput = document.getElementById("renameInput");
@@ -75,26 +76,31 @@ class List{
         document.getElementById(`list${index}`).style.backgroundColor = "LightGray";
 
         let list = this.lists[index];
+        this.selectedIndex = index;
         
-        this.curList.innerHTML = `<div class="d-flex">
-                                    <input type="text" placeholder="${list[0].listName}" class="renameInput" id="renameInput"> <button type="button" id="rename" class="rename">Rename</button>
-                                  </div>`;
+        this.renderListContents(list);                                    
 
         let rename = document.getElementById("rename");
         this.renameInput = document.getElementById("renameInput");
 
-        rename.addEventListener('click', () => {this.renameList(list)});
+        rename.onclick = this.renameList;
 
         } catch {
             console.log("error");
         }
     }
 
-    renameList(list){
-        list[0].listName = this.renameInput.value;
-        this.renameInput.value = "";
-
-        this.renderStoredLists();
+    renameList(){
+        if(this.selectedIndex != -1){
+            let list = this.lists[this.selectedIndex];
+            list[0].listName = this.renameInput.value;
+    
+            localStorage["lists"] = JSON.stringify(this.lists);
+            this.renderStoredLists();
+        } else {
+            console.log("selectedIndex = -1");
+        }
+        
     }
 
     deselectLists(){
@@ -102,7 +108,7 @@ class List{
             for(let i = 0; i < this.lists.length; i++){
                 document.getElementById(`list${i}`).style.backgroundColor = "white";
             }
-            this.selectedList = -1;
+            this.selectedIndex = -1;
         } catch {
             console.log("Cant deselect");
         }
@@ -130,6 +136,26 @@ class List{
 
         return `<div class="listItem list" id=list${listNum}>
                     <h4>- ${list[0].listName} <i class="bi bi-dash-square" style="float:right; margin-right: 15px;" id="deleteList${listNum}"></i></h4>
+                </div>`;
+    }
+
+    renderListContents(list){
+        const html = "";
+        console.log(list);
+        for(let i = 1; i < list.length; i++){
+            //html += this.renderListContent(list, i);
+        }
+    }
+
+    renderListContent(list, index){
+        return `<div class="row resultItem" id="">
+                    <div class="col-2"><img src="" alt="Movie Poster" style="width: 90%; height: 90%; margin-top: 7%;"></div> 
+                    <div class="col-2"><p><b>Title:${list[index].title}</b> 
+                        <br><b>Rating:</b> 
+                    </div>
+                    <div class="col-6">
+                        <b>Comments: </b>
+                    </div>
                 </div>`;
     }
 
