@@ -1,6 +1,7 @@
 import './general';
 const regeneratorRuntime = require("regenerator-runtime");
 let EMPTY_MOVIE = {title: '', rating: '', comments: '', link: ''};
+const IMAGE_URL = 'https://image.tmdb.org/t/p/w1280/';
 
 class List{
     constructor(){
@@ -23,6 +24,7 @@ class List{
         this.addListIcon = document.getElementById("addListIcon");
         this.curList = document.getElementById("currentList");
         this.renameInput;
+        this.currentListOutput = document.getElementById("currentListOutput");
 
         //bind necessary functions
         this.addEventListeners = this.addEventListeners.bind(this);
@@ -69,10 +71,10 @@ class List{
     selectList(index){
         //event.preventDefault();
 
+        try{
         this.deselectLists();
         this.renameInput = document.getElementById("renameInput");
 
-        try{
         document.getElementById(`list${index}`).style.backgroundColor = "LightGray";
 
         let list = this.lists[index];
@@ -84,10 +86,10 @@ class List{
         this.renameInput = document.getElementById("renameInput");
 
         rename.onclick = this.renameList;
-
         } catch {
-            console.log("error");
+            console.log("No lists");
         }
+
     }
 
     renameList(){
@@ -140,21 +142,27 @@ class List{
     }
 
     renderListContents(list){
-        const html = "";
+        let html = "";
         console.log(list);
-        for(let i = 1; i < list.length; i++){
-            //html += this.renderListContent(list, i);
+
+        if(list.length == 1){
+            html = "<div class='d-flex noResults'><h4>- No movies in current list. To add a movie, click on one in the search field and fill out the form. -</h4></div>";
+        } else {
+            for(let i = 1; i < list.length; i++){
+                html += this.renderListContent(list, i);
+            }
         }
+        
+
+        this.currentListOutput.innerHTML = html;
     }
 
     renderListContent(list, index){
         return `<div class="row resultItem" id="">
-                    <div class="col-2"><img src="" alt="Movie Poster" style="width: 90%; height: 90%; margin-top: 7%;"></div> 
-                    <div class="col-2"><p><b>Title:${list[index].title}</b> 
-                        <br><b>Rating:</b> 
-                    </div>
-                    <div class="col-6">
-                        <b>Comments: </b>
+                    <div class="col-2"><img src="${IMAGE_URL}${list[index].path}" alt="Movie Poster" style="width: 90%; height: 90%; margin-top: 7%;"></div> 
+                    <div class="col"><p><b>Title:</b> ${list[index].title} <br />
+                        <b>Rating:</b> ${list[index].rating} 
+                        <br /><br /><b>Comments: </b> ${list[index].comments}
                     </div>
                 </div>`;
     }

@@ -1,7 +1,7 @@
 import './general';
 const regeneratorRuntime = require("regenerator-runtime");
 
-const API_KEY = "?api_key=30a72465b4ea70bc5e40084e8fa0656d";
+//const API_KEY = "?api_key=30a72465b4ea70bc5e40084e8fa0656d";
 const options = {
     method: 'GET',
     headers: {
@@ -50,7 +50,7 @@ class Search{
     }
 
     //class methods
-
+    //method to add most event listeners to the page, some are added as elements are generated
     addEventListeners(){
         this.searchButton.onclick = this.submitMovieSearch;
         this.$prevPage.onclick = this.prevPage;
@@ -119,17 +119,21 @@ class Search{
         }
     }
 
+    //selects a reselt by highlighting it in yellow
+    //also calls showForm and renderSelectedInfo to generate a form for the desired movie
     selectResult(index){
+        //call helper functions
         this.deselectResults();
         this.showForm();
         this.renderSelectedInfo(index);
 
+        //update stored index
         this.selectedIndex = index;
-        console.log(this.selectedIndex);
+        //set style of selected movie
         document.getElementById(`sr${index}`).style.backgroundColor = "yellow";
-
     }
 
+    //cycles to  the next page of results
     nextPage(){
         //if curPage number is less than the max number of pages
         if(this.curPage < this.totalPages){
@@ -149,6 +153,7 @@ class Search{
         }
     }
 
+    //cycles to the previous page of  results
     prevPage(){
         //if curPage is greater than 1 (first page)
         if(this.curPage > 1){
@@ -168,12 +173,14 @@ class Search{
         }
     }
 
+    //helper function to make all search results white again
     deselectResults(){
         for(let i = 0; i < this.searchResults.length; i++){
             document.getElementById(`sr${i}`).style.backgroundColor = 'white';
         }
     }
 
+    //renders html for the selected movie and  forms
     renderSelectedInfo(index){
         let movie = this.searchResults[index];
         const html = `<div class="row">
@@ -184,8 +191,16 @@ class Search{
                       </div>`;
         this.selectedInfo.innerHTML = html;
 
+        //clear old children from select
+        let child = this.selectList.lastElementChild;
+        while (child) {
+            this.selectList.removeChild(child);
+            child = this.selectList.lastElementChild;
+        }
+
+        //add list names to the select bar
         for(let i = 0; i < this.listNames.length;  i++){
-            //create option element for  each lits
+            //create option element for  each list
             let opt = document.createElement('option');
             opt.value = this.listNames[i];
             opt.innerHTML = this.listNames[i];
@@ -195,6 +210,7 @@ class Search{
         }
     }
 
+    //retrieves the users created lists from local storage
     getListsFromStorage(){
         try{
             let lists = JSON.parse(localStorage["lists"]);
@@ -210,26 +226,34 @@ class Search{
         }
     }
 
+    //helper function to clear movie form flag
     showForm(){
         this.movieForm.hidden = false;
     }
 
+    //helper function to add movie form flag
     hideform(){
         this.movieForm.hidden = true;
     }
 
+    //method to add the selected movie to the selected list
+    //called when save button is clicked
     addMovie(){
         //retrieve lists from localStorage
         let lists =  JSON.parse(localStorage["lists"]);
         
+        //initialize local variables for movie and list
         let movie = this.searchResults[this.selectedIndex];
         let list = lists[this.selectList.selectedIndex];
 
-        console.log(movie);
-        console.log(list);
-        
+        //use form fields to push new object literal to list
+        list.push({title: movie.title, rating: this.formRating.value, comments: this.formComments.value, path: movie.poster_path})
+
+        //clear form fields
+        this.formRating.value = "";
+        this.formComments.value = "";
         //save lists to localStorage
-        //localStorage["lists"] = JSON.stringify(lists);
+        localStorage["lists"] = JSON.stringify(lists);
     }
 };
 
